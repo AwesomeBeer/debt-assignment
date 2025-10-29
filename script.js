@@ -2,26 +2,24 @@
 let currentPage = 1;
 
 function loadData() {
-    const skip = (currentPage - 1) * 5;
-    fetch(`https://dummyjson.com/products?limit=5&skip=${skip}`)
+    fetch(`https://api.worldbank.org/v2/country?format=json&per_page=10&page=${currentPage}`)
         .then(response => response.json())
         .then(data => {
-            currentPage++;
-            renderTable(data.products);
-            
+            currentPage++;renderTable(data[1]);           
         });
 }
 
-function renderTable(products) {
+function renderTable(countries) {
     const tableBody = document.getElementById('tableBody');
     
-    products.forEach(product => {
+    countries.forEach(country => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${product.id}</td>
-            <td>${product.title}</td>
-            <td>$${product.price}</td>
-            <td>${product.category}</td>`;
+            <td>${country.id}</td>
+            <td>${country.name}</td>
+            <td>${country.region.value}</td>
+            <td>${country.incomeLevel.value}</td>`;
+
         tableBody.appendChild(row);
     });
 }
